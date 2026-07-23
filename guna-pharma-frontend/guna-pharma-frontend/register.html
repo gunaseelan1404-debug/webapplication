@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your GUNA PHARMA Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div class="app">
+  <div class="brand-panel">
+    <svg class="cross-motif" viewBox="0 0 100 100"><path fill="#fff" d="M40 0h20v40h40v20H60v40H40V60H0V40h40z"/></svg>
+    <div class="brand-logo">
+      <div class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+      <div class="brand-word">GUNA <span>PHARMA</span></div>
+    </div>
+    <div class="brand-mid">
+      <h1>Your health, delivered<br>with care and precision.</h1>
+      <p>Create your account to order medicines, manage prescriptions, and get trusted pharmacy support — all in one place.</p>
+      <svg class="pulse-wrap" viewBox="0 0 420 60" preserveAspectRatio="none">
+        <path class="pulse-line" d="M0 30 H120 L140 8 L160 52 L180 18 L195 42 L210 30 H420"/>
+      </svg>
+      <ul class="feature-list">
+        <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg></span>
+          <div><b>Secure &amp; encrypted</b>Your password is hashed and never stored in plain text.</div></li>
+        <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 7h13v10H3zM16 10h4l2 3v4h-6z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></span>
+          <div><b>Fast home delivery</b>Genuine medicines delivered to your doorstep.</div></li>
+        <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 21v-6a4 4 0 014-4h8a4 4 0 014 4v6M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg></span>
+          <div><b>15% member discount</b>Every order gets an automatic 15% off at checkout.</div></li>
+      </ul>
+    </div>
+    <div class="brand-footer">© 2026 GUNA PHARMA. Trusted online medical store.</div>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-shell">
+      <div class="mobile-brand">
+        <div class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+        <div><b>GUNA PHARMA</b><span>Online Medical Store</span></div>
+      </div>
+
+      <div class="form-head">
+        <h2>Create Your GUNA PHARMA Account</h2>
+        <p>Fields marked * are required.</p>
+      </div>
+
+      <div class="banner banner-error" id="formBanner"></div>
+
+      <form id="regForm" novalidate>
+        <div class="group">
+          <div class="group-title"><span class="gt-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0114 0v1"/></svg></span>Personal details</div>
+
+          <div class="row">
+            <div class="field">
+              <label>First Name *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span>
+                <input type="text" id="firstName" placeholder="e.g. Arun" autocomplete="given-name"></div>
+              <div class="err-msg" id="err-firstName"></div>
+            </div>
+            <div class="field">
+              <label>Last Name *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span>
+                <input type="text" id="lastName" placeholder="e.g. Kumar" autocomplete="family-name"></div>
+              <div class="err-msg" id="err-lastName"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Email Address *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+              <input type="email" id="email" placeholder="you@example.com" autocomplete="email"></div>
+            <div class="err-msg" id="err-email"></div>
+          </div>
+
+          <div class="field">
+            <label>Mobile Number *</label>
+            <div class="input-wrap has-prefix"><span class="prefix-badge">+91</span>
+              <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 006 6L16 14l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
+              <input type="tel" id="mobile" placeholder="98765 43210" maxlength="10" autocomplete="tel"></div>
+            <div class="err-msg" id="err-mobile"></div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Gender *</label>
+              <div class="pill-group">
+                <div class="pill-option"><input type="radio" name="gender" id="g-male" value="Male"><label for="g-male">Male</label></div>
+                <div class="pill-option"><input type="radio" name="gender" id="g-female" value="Female"><label for="g-female">Female</label></div>
+                <div class="pill-option"><input type="radio" name="gender" id="g-other" value="Other"><label for="g-other">Other</label></div>
+              </div>
+              <div class="err-msg" id="err-gender"></div>
+            </div>
+            <div class="field">
+              <label>Date of Birth *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+                <input type="date" id="dob"></div>
+              <div class="err-msg" id="err-dob"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Medical Shop Name <span class="opt">(optional)</span></label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l1.5-5h13L20 10M4 10v9a1 1 0 001 1h14a1 1 0 001-1v-9M4 10h16M9 20v-5h6v5"/></svg></span>
+              <input type="text" id="shopName" placeholder="e.g. Guna Medicals, Anna Nagar"></div>
+          </div>
+
+          <div class="photo-row">
+            <div class="photo-circle" id="photoCircle" title="Upload profile photo">
+              <svg id="photoPlaceholder" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8a2 2 0 012-2h1l1.5-2h7L17 6h1a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              <img id="photoPreview" style="display:none;">
+            </div>
+            <div class="photo-info">
+              <b>Profile Photo <span class="opt">(optional)</span></b>
+              <span>JPG or PNG, up to 3MB</span>
+              <button type="button" id="photoBtn">Choose photo</button>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" style="display:none;">
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span class="gt-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span>Account security</div>
+
+          <div class="field">
+            <label>Password *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span>
+              <input type="password" id="password" placeholder="Create a strong password" autocomplete="new-password">
+              <button type="button" class="eye-btn" data-target="password"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+            <div class="strength" id="strengthBar"><i></i><i></i><i></i><i></i></div>
+            <div class="strength-label" id="strengthLabel">Use 8+ characters with upper, lower, number &amp; symbol</div>
+            <div class="err-msg" id="err-password"></div>
+          </div>
+
+          <div class="field">
+            <label>Confirm Password *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span>
+              <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+              <button type="button" class="eye-btn" data-target="confirmPassword"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+            <div class="err-msg" id="err-confirmPassword"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span class="gt-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-12a7 7 0 00-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>Delivery address</div>
+
+          <div class="field">
+            <label>House No. / Street *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg></span>
+              <input type="text" id="street" placeholder="Door No, Street name"></div>
+            <div class="err-msg" id="err-street"></div>
+          </div>
+
+          <div class="field">
+            <label>Area / Locality *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-7h14l2 7M5 12v7h14v-7M9 19v-5h6v5"/></svg></span>
+              <input type="text" id="area" placeholder="e.g. Anna Nagar"></div>
+            <div class="err-msg" id="err-area"></div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>City *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V7l6-4 6 4v14M14 21V11l6 3v7"/></svg></span>
+                <input type="text" id="city" placeholder="e.g. Madurai"></div>
+              <div class="err-msg" id="err-city"></div>
+            </div>
+            <div class="field">
+              <label>District *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h13l-2 4 2 4H3z"/><path d="M3 4v16"/></svg></span>
+                <input type="text" id="district" placeholder="e.g. Madurai"></div>
+              <div class="err-msg" id="err-district"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>State *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h13l-2 4 2 4H3z"/><path d="M3 4v16"/></svg></span>
+                <input type="text" id="state" placeholder="e.g. Tamil Nadu"></div>
+              <div class="err-msg" id="err-state"></div>
+            </div>
+            <div class="field">
+              <label>Pincode *</label>
+              <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9h16M9 4v16"/></svg></span>
+                <input type="text" id="pincode" placeholder="6-digit pincode" maxlength="6"></div>
+              <div class="err-msg" id="err-pincode"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Country *</label>
+            <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>
+              <select id="country">
+                <option value="">Select country</option>
+                <option value="India" selected>India</option>
+                <option value="Sri Lanka">Sri Lanka</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="Singapore">Singapore</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Other">Other</option>
+              </select></div>
+            <div class="err-msg" id="err-country"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span class="gt-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Consent &amp; preferences</div>
+
+          <div class="check-row"><input type="checkbox" id="terms"><label for="terms">I agree to the <a href="#" onclick="return false;">Terms &amp; Conditions</a> *</label></div>
+          <div class="err-msg" id="err-terms" style="margin:-8px 0 12px 28px;"></div>
+
+          <div class="check-row"><input type="checkbox" id="privacy"><label for="privacy">I agree to the <a href="#" onclick="return false;">Privacy Policy</a> *</label></div>
+          <div class="err-msg" id="err-privacy" style="margin:-8px 0 12px 28px;"></div>
+
+          <div class="check-row"><input type="checkbox" id="subscribe"><label for="subscribe">Subscribe to health offers and medicine updates <span class="opt">(optional)</span></label></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">REGISTER</button>
+        <div class="switch-line">Already have an account? <a href="login.html">Login Here</a></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script>
+(function(){
+  const $ = (id) => document.getElementById(id);
+
+  document.querySelectorAll('.eye-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = $(btn.getAttribute('data-target'));
+      target.type = target.type === 'password' ? 'text' : 'password';
+    });
+  });
+
+  const photoCircle = $('photoCircle'), photoInput = $('photoInput'), photoPreview = $('photoPreview'), photoPlaceholder = $('photoPlaceholder');
+  photoCircle.addEventListener('click', ()=> photoInput.click());
+  $('photoBtn').addEventListener('click', ()=> photoInput.click());
+  photoInput.addEventListener('change', ()=>{
+    const file = photoInput.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
+    const reader = new FileReader();
+    reader.onload = (e)=>{ photoPreview.src = e.target.result; photoPreview.style.display = 'block'; photoPlaceholder.style.display = 'none'; };
+    reader.readAsDataURL(file);
+  });
+
+  const strengthBar = $('strengthBar'), strengthLabel = $('strengthLabel');
+  function scorePassword(pw){
+    let score = 0;
+    if(pw.length >= 8) score++;
+    if(/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+    if(/\d/.test(pw)) score++;
+    if(/[^A-Za-z0-9]/.test(pw)) score++;
+    return score;
+  }
+  $('password').addEventListener('input', (e)=>{
+    const score = scorePassword(e.target.value);
+    const bars = strengthBar.querySelectorAll('i');
+    const colors = ['#E24C4C','#E2A94C','#4CA9E2','#12A454'];
+    const labels = ['Weak password','Fair password','Good password','Strong password'];
+    bars.forEach((bar, i)=>{ bar.style.background = i < score ? colors[Math.max(score-1,0)] : '#DCE9E1'; });
+    strengthLabel.textContent = e.target.value.length === 0 ? 'Use 8+ characters with upper, lower, number & symbol' : labels[Math.max(score-1,0)];
+  });
+
+  function setError(fieldId, msg){
+    const input = $(fieldId); const err = $('err-' + fieldId);
+    if(input) input.classList.add('err');
+    if(err){ err.textContent = msg; err.classList.add('show'); }
+  }
+  function clearError(fieldId){
+    const input = $(fieldId); const err = $('err-' + fieldId);
+    if(input) input.classList.remove('err');
+    if(err){ err.textContent=''; err.classList.remove('show'); }
+  }
+  const allFieldIds = ['firstName','lastName','email','mobile','password','confirmPassword','dob','street','area','city','district','state','pincode','country','gender','terms','privacy'];
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const MOBILE_RE = /^[0-9]{10}$/;
+  const PIN_RE = /^[0-9]{6}$/;
+  const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+  function showBanner(msg){ const b = $('formBanner'); b.textContent = msg; b.classList.add('show'); }
+  function hideBanner(){ $('formBanner').classList.remove('show'); }
+
+  $('regForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    hideBanner();
+    allFieldIds.concat(['confirmPassword']).forEach(clearError);
+
+    let hasError = false;
+    const fail = (id, msg) => { setError(id, msg); hasError = true; };
+
+    const firstName = $('firstName').value.trim();
+    const lastName = $('lastName').value.trim();
+    const email = $('email').value.trim();
+    const mobile = $('mobile').value.trim();
+    const password = $('password').value;
+    const confirmPassword = $('confirmPassword').value;
+    const genderEl = document.querySelector('input[name=gender]:checked');
+    const dob = $('dob').value;
+    const street = $('street').value.trim();
+    const area = $('area').value.trim();
+    const city = $('city').value.trim();
+    const district = $('district').value.trim();
+    const state = $('state').value.trim();
+    const pincode = $('pincode').value.trim();
+    const country = $('country').value;
+    const terms = $('terms').checked;
+    const privacy = $('privacy').checked;
+
+    if(!firstName) fail('firstName', 'First name is required.');
+    if(!lastName) fail('lastName', 'Last name is required.');
+    if(!email) fail('email', 'Email address is required.'); else if(!EMAIL_RE.test(email)) fail('email', 'Enter a valid email address.');
+    if(!mobile) fail('mobile', 'Mobile number is required.'); else if(!MOBILE_RE.test(mobile)) fail('mobile', 'Mobile number must contain exactly 10 digits.');
+    if(!password) fail('password', 'Password is required.'); else if(!PASSWORD_RE.test(password)) fail('password', 'Min 8 characters incl. uppercase, lowercase, number & special character.');
+    if(!confirmPassword) fail('confirmPassword', 'Please confirm your password.'); else if(password !== confirmPassword) fail('confirmPassword', 'Passwords do not match.');
+    if(!genderEl) fail('gender', 'Please select a gender.');
+    if(!dob) fail('dob', 'Date of birth is required.');
+    if(!street) fail('street', 'House No. / Street is required.');
+    if(!area) fail('area', 'Area / Locality is required.');
+    if(!city) fail('city', 'City is required.');
+    if(!district) fail('district', 'District is required.');
+    if(!state) fail('state', 'State is required.');
+    if(!pincode) fail('pincode', 'Pincode is required.'); else if(!PIN_RE.test(pincode)) fail('pincode', 'Pincode must be a 6-digit number.');
+    if(!country) fail('country', 'Please select a country.');
+    if(!terms) fail('terms', 'You must agree to the Terms & Conditions.');
+    if(!privacy) fail('privacy', 'You must agree to the Privacy Policy.');
+
+    if(hasError){
+      showBanner('Please fix the highlighted fields before continuing.');
+      const firstErr = document.querySelector('.err-msg.show');
+      if(firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    const submitBtn = $('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'REGISTERING...';
+
+    try{
+      const data = await GUNA.api('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          firstName, lastName, email, mobile, password, confirmPassword,
+          gender: genderEl.value, dob, shopName: $('shopName').value.trim(),
+          street, area, city, district, state, pincode, country,
+          terms, privacy, subscribe: $('subscribe').checked
+        })
+      });
+      GUNA.setSession(data.token, data.customer);
+      window.location.href = 'products.html?welcome=1';
+    } catch(err){
+      if(err.data && err.data.errors){
+        Object.entries(err.data.errors).forEach(([field, msg]) => setError(field, msg));
+        showBanner('Please fix the highlighted fields before continuing.');
+      } else {
+        showBanner(err.message || 'Something went wrong. Please try again.');
+      }
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'REGISTER';
+    }
+  });
+
+  allFieldIds.forEach(id=>{ const el = $(id); if(el) el.addEventListener('input', ()=>clearError(id)); });
+  document.querySelectorAll('input[name=gender]').forEach(r=> r.addEventListener('change', ()=>clearError('gender')));
+  $('terms').addEventListener('change', ()=>clearError('terms'));
+  $('privacy').addEventListener('change', ()=>clearError('privacy'));
+  $('country').addEventListener('change', ()=>clearError('country'));
+  $('mobile').addEventListener('input', (e)=>{ e.target.value = e.target.value.replace(/\D/g,'').slice(0,10); });
+  $('pincode').addEventListener('input', (e)=>{ e.target.value = e.target.value.replace(/\D/g,'').slice(0,6); });
+})();
+</script>
+</body>
+</html>
