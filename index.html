@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>GUNA PHARMA</title></head>
+<body>
+<script>
+  const hasToken = !!localStorage.getItem('guna_token');
+  window.location.href = hasToken ? 'products.html' : 'register.html';
+</script>
+</body>
+</html>

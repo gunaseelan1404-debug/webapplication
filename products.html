@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products - GUNA PHARMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+    <div><b>GUNA PHARMA</b><span>Hi, <span id="navCustomerName">there</span></span></div>
+  </div>
+  <nav>
+    <a href="products.html">Products</a>
+    <a href="orders.html">My Orders</a>
+    <a href="cart.html" class="cart-badge">Cart <span class="count" id="navCartCount" style="display:none;">0</span></a>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
+  </nav>
+</div>
+
+<div class="page-wrap">
+  <div class="banner banner-success" id="welcomeBanner"></div>
+
+  <div class="page-head">
+    <h1>Shop medicines &amp; healthcare products</h1>
+    <p>All orders get an automatic <b>15% discount</b> at checkout, paid via GPay.</p>
+  </div>
+
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script>
+(function(){
+  if (!GUNA.requireLogin()) return;
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('welcome') === '1') {
+    const b = document.getElementById('welcomeBanner');
+    b.textContent = 'Registration Successful! Welcome to GUNA PHARMA.';
+    b.classList.add('show');
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    GUNA.clearSession();
+    window.location.href = 'login.html?loggedout=1';
+  });
+
+  let allProducts = [];
+  let discountRate = 0.15;
+  let activeCategory = 'All';
+
+  function money(n){ return GUNA.money(n); }
+
+  function renderFilters(){
+    const categories = ['All', ...new Set(allProducts.map(p => p.category))];
+    const bar = document.getElementById('filterBar');
+    bar.innerHTML = '';
+    categories.forEach(cat => {
+      const chip = document.createElement('button');
+      chip.className = 'filter-chip' + (cat === activeCategory ? ' active' : '');
+      chip.textContent = cat;
+      chip.addEventListener('click', () => { activeCategory = cat; renderFilters(); renderGrid(); });
+      bar.appendChild(chip);
+    });
+  }
+
+  function renderGrid(){
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    const list = activeCategory === 'All' ? allProducts : allProducts.filter(p => p.category === activeCategory);
+
+    list.forEach(p => {
+      const discountedPrice = Math.round(p.price * (1 - discountRate) * 100) / 100;
+      const stockClass = p.stock === 0 ? 'out' : (p.stock <= 10 ? 'low' : '');
+      const stockText = p.stock === 0 ? 'Out of stock' : (p.stock <= 10 ? `Only ${p.stock} left` : `${p.stock} in stock`);
+
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <div class="product-emoji">${p.image_emoji || '💊'}</div>
+        <div class="cat">${p.category}</div>
+        <h3>${p.name}</h3>
+        <div class="desc">${p.description || ''} · ${p.unit}</div>
+        <div class="price-row">
+          <span class="price-now">${money(discountedPrice)}</span>
+          <span class="price-old">${money(p.price)}</span>
+          <span class="badge badge-green">15% OFF</span>
+        </div>
+        <div class="stock-row ${stockClass}">${stockText}</div>
+        <button class="btn btn-primary btn-block btn-sm add-btn" ${p.stock === 0 ? 'disabled' : ''}>
+          ${p.stock === 0 ? 'Out of stock' : 'Add to Cart'}
+        </button>
+      `;
+      card.querySelector('.add-btn').addEventListener('click', async (e) => {
+        const btn = e.target;
+        btn.disabled = true;
+        btn.textContent = 'Adding...';
+        try {
+          await GUNA.api('/api/cart', { method: 'POST', body: JSON.stringify({ productId: p.id, quantity: 1 }) });
+          btn.textContent = 'Added ✓';
+          gunaRefreshNav();
+          setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 1200);
+        } catch (err) {
+          alert(err.message || 'Could not add to cart.');
+          btn.textContent = 'Add to Cart';
+          btn.disabled = false;
+        }
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  (async function load(){
+    try {
+      const data = await GUNA.api('/api/products');
+      allProducts = data.products;
+      discountRate = data.discountRate;
+      renderFilters();
+      renderGrid();
+    } catch (err) {
+      document.getElementById('productGrid').innerHTML = '<p>Could not load products right now.</p>';
+    }
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart - GUNA PHARMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+    <div><b>GUNA PHARMA</b><span>Hi, <span id="navCustomerName">there</span></span></div>
+  </div>
+  <nav>
+    <a href="products.html">Products</a>
+    <a href="orders.html">My Orders</a>
+    <a href="cart.html" class="cart-badge">Cart <span class="count" id="navCartCount" style="display:none;">0</span></a>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
+  </nav>
+</div>
+
+<div class="page-wrap" style="max-width:760px;">
+  <div class="page-head">
+    <h1>Your Cart</h1>
+    <p>Review your items, then pay via GPay to place your order.</p>
+  </div>
+
+  <div class="banner banner-error" id="cartBanner"></div>
+
+  <div id="cartContent"></div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script>
+(function(){
+  if (!GUNA.requireLogin()) return;
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    GUNA.clearSession();
+    window.location.href = 'login.html?loggedout=1';
+  });
+
+  const GPAY_NUMBER = '8148331184';
+  let cartItems = [];
+  let discountRate = 0.15;
+
+  function money(n){ return GUNA.money(n); }
+
+  function computeTotals(){
+    const subtotal = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+    const discountAmount = Math.round(subtotal * discountRate * 100) / 100;
+    const total = Math.round((subtotal - discountAmount) * 100) / 100;
+    return { subtotal, discountAmount, total };
+  }
+
+  function render(){
+    const wrap = document.getElementById('cartContent');
+
+    if (cartItems.length === 0) {
+      wrap.innerHTML = `
+        <div class="group empty-state">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1.5"/><circle cx="18" cy="21" r="1.5"/><path d="M2 3h2l2.4 12.2A2 2 0 008.36 17H18a2 2 0 002-1.7L21.5 7H6"/></svg>
+          <p>Your cart is empty.</p>
+          <a href="products.html" class="btn btn-primary">Browse Products</a>
+        </div>`;
+      return;
+    }
+
+    const { subtotal, discountAmount, total } = computeTotals();
+
+    const itemsHtml = cartItems.map(item => `
+      <div class="cart-item" data-id="${item.cart_item_id}">
+        <div class="emoji">${item.image_emoji || '💊'}</div>
+        <div class="info">
+          <b>${item.name}</b>
+          <span>${item.unit} · ${money(item.price)} each</span>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-minus">−</button>
+          <span class="qty-val">${item.quantity}</span>
+          <button class="qty-plus">+</button>
+        </div>
+        <div class="line-total">${money(item.price * item.quantity)}</div>
+        <button class="remove-link">Remove</button>
+      </div>
+    `).join('');
+
+    wrap.innerHTML = `
+      <div class="group" style="margin-bottom:18px;">${itemsHtml}</div>
+
+      <div class="group" style="margin-bottom:18px;">
+        <div class="summary-row"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+        <div class="summary-row"><span>Discount (15%)</span><span class="discount">− ${money(discountAmount)}</span></div>
+        <div class="summary-row total"><span>Total Payable</span><span>${money(total)}</span></div>
+      </div>
+
+      <div class="group">
+        <div class="group-title" style="margin-bottom:10px;">Pay via GPay</div>
+        <div class="gpay-box">
+          <p>Scan or send payment to this GPay number</p>
+          <div class="num mono">${GPAY_NUMBER}</div>
+          <p>Amount to pay: <b>${money(total)}</b></p>
+        </div>
+        <div class="field">
+          <label>GPay Transaction / UPI Reference No. <span style="font-weight:400;color:var(--muted-2);">(optional, add after paying)</span></label>
+          <input type="text" id="paymentReference" placeholder="e.g. 123456789012">
+        </div>
+        <button class="btn btn-primary btn-block" id="checkoutBtn">SUBMIT ORDER</button>
+        <p style="font-size:12px;color:var(--muted-2);margin:10px 0 0;text-align:center;">
+          Your order is placed as "Payment Pending" until GUNA PHARMA confirms your GPay payment.
+        </p>
+      </div>
+    `;
+
+    wrap.querySelectorAll('.qty-minus').forEach(btn => btn.addEventListener('click', (e) => {
+      const id = e.target.closest('.cart-item').dataset.id;
+      const item = cartItems.find(i => String(i.cart_item_id) === id);
+      updateQuantity(id, item.quantity - 1);
+    }));
+    wrap.querySelectorAll('.qty-plus').forEach(btn => btn.addEventListener('click', (e) => {
+      const id = e.target.closest('.cart-item').dataset.id;
+      const item = cartItems.find(i => String(i.cart_item_id) === id);
+      updateQuantity(id, item.quantity + 1);
+    }));
+    wrap.querySelectorAll('.remove-link').forEach(btn => btn.addEventListener('click', (e) => {
+      const id = e.target.closest('.cart-item').dataset.id;
+      updateQuantity(id, 0);
+    }));
+
+    document.getElementById('checkoutBtn').addEventListener('click', submitOrder);
+  }
+
+  async function updateQuantity(cartItemId, newQty){
+    try {
+      const data = await GUNA.api('/api/cart/' + cartItemId, {
+        method: 'PATCH',
+        body: JSON.stringify({ quantity: newQty })
+      });
+      cartItems = data.items;
+      render();
+      gunaRefreshNav();
+    } catch (err) {
+      showBanner(err.message || 'Could not update cart.');
+    }
+  }
+
+  async function submitOrder(){
+    const btn = document.getElementById('checkoutBtn');
+    btn.disabled = true;
+    btn.textContent = 'PLACING ORDER...';
+    try {
+      const paymentReference = document.getElementById('paymentReference').value.trim();
+      const data = await GUNA.api('/api/orders/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ paymentReference })
+      });
+      window.location.href = 'orders.html?placed=' + encodeURIComponent(data.order.order_id);
+    } catch (err) {
+      showBanner(err.message || 'Could not place your order.');
+      btn.disabled = false;
+      btn.textContent = 'SUBMIT ORDER';
+    }
+  }
+
+  function showBanner(msg){
+    const b = document.getElementById('cartBanner');
+    b.textContent = msg;
+    b.classList.add('show');
+  }
+
+  (async function load(){
+    try {
+      const data = await GUNA.api('/api/cart');
+      cartItems = data.items;
+      discountRate = data.discountRate;
+      render();
+    } catch (err) {
+      showBanner('Could not load your cart right now.');
+    }
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - GUNA PHARMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div class="app">
+  <div class="brand-panel">
+    <svg class="cross-motif" viewBox="0 0 100 100"><path fill="#fff" d="M40 0h20v40h40v20H60v40H40V60H0V40h40z"/></svg>
+    <div class="brand-logo">
+      <div class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+      <div class="brand-word">GUNA <span>PHARMA</span></div>
+    </div>
+    <div class="brand-mid">
+      <h1>Welcome back to<br>your trusted pharmacy.</h1>
+      <p>Log in to browse medicines, check stock, and check out with your automatic 15% member discount.</p>
+      <svg class="pulse-wrap" viewBox="0 0 420 60" preserveAspectRatio="none">
+        <path class="pulse-line" d="M0 30 H120 L140 8 L160 52 L180 18 L195 42 L210 30 H420"/>
+      </svg>
+      <ul class="feature-list">
+        <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg></span>
+          <div><b>Secure login</b>Your session is protected with encrypted tokens.</div></li>
+        <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 7h13v10H3zM16 10h4l2 3v4h-6z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></span>
+          <div><b>Track your orders</b>See order status from Payment Pending to Delivered.</div></li>
+      </ul>
+    </div>
+    <div class="brand-footer">© 2026 GUNA PHARMA. Trusted online medical store.</div>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-shell" style="max-width:420px;">
+      <div class="mobile-brand">
+        <div class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" fill="#12A454"/></svg></div>
+        <div><b>GUNA PHARMA</b><span>Online Medical Store</span></div>
+      </div>
+
+      <div class="form-head">
+        <h2>Welcome back</h2>
+        <p>Log in to your GUNA PHARMA account.</p>
+      </div>
+
+      <div class="banner banner-error" id="formBanner"></div>
+      <div class="banner banner-success" id="successBanner"></div>
+
+      <form id="loginForm" novalidate class="group">
+        <div class="field">
+          <label>Email Address</label>
+          <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email"></div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span>
+            <input type="password" id="password" placeholder="Your password" autocomplete="current-password">
+            <button type="button" class="eye-btn" id="eyeBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">LOG IN</button>
+        <div class="switch-line">New to GUNA PHARMA? <a href="register.html">Create an account</a></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script>
+(function(){
+  const $ = (id) => document.getElementById(id);
+
+  $('eyeBtn').addEventListener('click', ()=>{
+    const pw = $('password');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('registered') === '1') {
+    const b = $('successBanner');
+    b.textContent = 'Registration Successful! Welcome to GUNA PHARMA. Please log in.';
+    b.classList.add('show');
+  }
+  if (params.get('loggedout') === '1') {
+    const b = $('successBanner');
+    b.textContent = 'You have been logged out.';
+    b.classList.add('show');
+  }
+
+  $('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const banner = $('formBanner');
+    banner.classList.remove('show');
+
+    const email = $('email').value.trim();
+    const password = $('password').value;
+    if (!email || !password) {
+      banner.textContent = 'Please enter both email and password.';
+      banner.classList.add('show');
+      return;
+    }
+
+    const submitBtn = $('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'LOGGING IN...';
+
+    try {
+      const data = await GUNA.api('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      GUNA.setSession(data.token, data.customer);
+      window.location.href = 'products.html';
+    } catch (err) {
+      banner.textContent = err.message || 'Invalid email or password.';
+      banner.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'LOG IN';
+    }
+  });
+})();
+</script>
+</body>
+</html>
