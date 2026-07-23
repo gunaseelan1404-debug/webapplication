@@ -63,7 +63,29 @@ Admin routes need header: `x-admin-key: <ADMIN_KEY>`.
 | GET  | `/api/admin/customers` | admin key | All registered customers |
 | GET  | `/api/health` | — | Health check |
 
-## 4. Security notes
+## 4. Deployed on Railway
+
+This backend is live at:
+`https://webapplication-production-235c.up.railway.app`
+
+Railway doesn't read your local `.env` file — set the same variables in
+**Railway → your project → Variables**:
+
+| Variable | Value |
+|---|---|
+| `JWT_SECRET` | a long random string |
+| `ADMIN_KEY` | your admin dashboard password |
+| `GPAY_NUMBER` | `8148331184` |
+| `DISCOUNT_RATE` | `0.15` |
+
+`PORT` is set automatically by Railway — don't override it.
+
+CORS is locked to the deployed frontend
+(`https://webapplication-uvvq.vercel.app`) plus `http://localhost:5500`
+for local testing. If you change the frontend's domain, update the
+`allowedOrigins` list in `server.js` and redeploy.
+
+## 5. Security notes
 
 - Passwords are hashed with **bcrypt** before storage — plain passwords are
   never saved.
@@ -77,7 +99,7 @@ Admin routes need header: `x-admin-key: <ADMIN_KEY>`.
   app.use(cors({ origin: 'https://your-frontend-domain.com' }));
   ```
 
-## 5. Project structure
+## 6. Project structure
 
 ```
 guna-pharma-backend/

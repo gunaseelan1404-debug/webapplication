@@ -4,27 +4,22 @@ This is just the website — plain HTML, CSS and JavaScript. It has no
 database and no server logic of its own; every page calls the separate
 **guna-pharma-backend** project over the network for data.
 
-## 1. Point it at your backend
+## 1. Live deployment
 
-Start `guna-pharma-backend` first (see its own README) — by default it
-runs at `http://localhost:4000`.
+- Frontend: https://webapplication-uvvq.vercel.app
+- Backend: https://webapplication-production-235c.up.railway.app
 
-Open `js/config.js` in this folder and confirm the URL matches:
-
-```js
-window.GUNA_CONFIG = {
-  API_BASE_URL: 'http://localhost:4000'
-};
-```
-
-Change this one line whenever the backend's address changes — for example
-once you deploy the backend to a live server:
+`js/config.js` already points this frontend at the Railway backend:
 
 ```js
 window.GUNA_CONFIG = {
-  API_BASE_URL: 'https://api.gunapharma.com'
+  API_BASE_URL: 'https://webapplication-production-235c.up.railway.app'
 };
 ```
+
+If you ever move the backend to a different address, update that one line
+and redeploy the frontend (push to the connected GitHub repo, or
+re-upload to Vercel).
 
 ## 2. Run the frontend
 

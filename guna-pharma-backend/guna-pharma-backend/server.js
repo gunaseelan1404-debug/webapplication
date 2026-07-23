@@ -13,8 +13,20 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 
 // This is an API-only server. The frontend (guna-pharma-frontend) is a
-// separate static site and calls this server over HTTP, so CORS is open.
-app.use(cors());
+// separate static site hosted on Vercel and calls this server over HTTP.
+const allowedOrigins = [
+  'https://webapplication-uvvq.vercel.app',
+  'http://localhost:5500' // for local frontend testing
+];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
