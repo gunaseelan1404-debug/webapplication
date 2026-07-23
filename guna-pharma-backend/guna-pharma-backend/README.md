@@ -4,10 +4,26 @@ This is the API server only. It does not serve any web pages — the website
 itself lives in the separate `guna-pharma-frontend` folder and talks to this
 server over HTTP.
 
-Built with Node.js + Express + SQLite (file-based, no external database
-server needed).
+Built with Node.js + Express + **MySQL** (via `mysql2`).
 
-## 1. Install
+## 1. Get a MySQL database
+
+You need a MySQL database somewhere before this will start. Options:
+
+- **Railway** — click "New" → "Database" → "Add MySQL" in your project.
+  Railway auto-creates the DB and gives you connection variables you can
+  reference directly (see section 4 below).
+- **PlanetScale / Aiven / any managed MySQL** — they'll give you a
+  connection string like `mysql://user:pass@host:3306/dbname`.
+- **Local MySQL** — install MySQL, then run:
+  ```sql
+  CREATE DATABASE guna_pharma;
+  ```
+
+You don't need to create any tables yourself — the app creates them
+automatically on first run.
+
+## 2. Install
 
 Requires **Node.js 18+**.
 
@@ -21,9 +37,10 @@ Edit `.env`:
 - `ADMIN_KEY` — password for the admin dashboard in the frontend
 - `GPAY_NUMBER` — already set to `8148331184`
 - `DISCOUNT_RATE` — already set to `0.15` (15%)
-- `PORT` — defaults to `4000`
+- Either `MYSQL_URL` (a full connection string) **or** the individual
+  `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` fields
 
-## 2. Run
+## 3. Run
 
 ```bash
 npm start
@@ -31,16 +48,17 @@ npm start
 
 You should see:
 ```
+MySQL tables ready.
 GUNA PHARMA API server running at http://localhost:4000
 ```
 
-The database file is created automatically at `db/guna_pharma.db` on first
-run, seeded with 12 sample medical products.
+Tables are created automatically on first run, and 12 sample medical
+products are seeded if the `products` table is empty.
 
 Now start the frontend project separately and point it at this server's
-URL (`http://localhost:4000` by default) — see the frontend's README.
+URL — see the frontend's README.
 
-## 3. API reference
+## 4. API reference
 
 All request/response bodies are JSON. Protected routes need a header:
 `Authorization: Bearer <token>` (token comes back from register/login).
@@ -63,13 +81,13 @@ Admin routes need header: `x-admin-key: <ADMIN_KEY>`.
 | GET  | `/api/admin/customers` | admin key | All registered customers |
 | GET  | `/api/health` | — | Health check |
 
-## 4. Deployed on Railway
+## 5. Deployed on Railway
 
 This backend is live at:
 `https://webapplication-production-235c.up.railway.app`
 
-Railway doesn't read your local `.env` file — set the same variables in
-**Railway → your project → Variables**:
+Railway doesn't read your local `.env` file — set these in
+**Railway → your project → your backend service → Variables**:
 
 | Variable | Value |
 |---|---|
@@ -78,6 +96,18 @@ Railway doesn't read your local `.env` file — set the same variables in
 | `GPAY_NUMBER` | `8148331184` |
 | `DISCOUNT_RATE` | `0.15` |
 
+**For the database**, if you added Railway's MySQL plugin to the same
+project, it already injects `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`,
+`MYSQLPASSWORD`, `MYSQLDATABASE` (or a single `MYSQL_URL`) automatically —
+this code picks those up on its own, you don't need to set `DB_*`
+variables yourself in that case.
+
+If instead you're using an **external MySQL** (PlanetScale, Aiven, your
+own server, etc.), set `MYSQL_URL` to its full connection string, e.g.:
+```
+MYSQL_URL=mysql://user:password@your-host:3306/guna_pharma
+```
+
 `PORT` is set automatically by Railway — don't override it.
 
 CORS is locked to the deployed frontend
@@ -85,30 +115,28 @@ CORS is locked to the deployed frontend
 for local testing. If you change the frontend's domain, update the
 `allowedOrigins` list in `server.js` and redeploy.
 
-## 5. Security notes
+## 6. Security notes
 
 - Passwords are hashed with **bcrypt** before storage — plain passwords are
   never saved.
 - All registration rules (email format, 10-digit mobile, password strength,
   6-digit pincode, required checkboxes) are validated again on the server,
   so they can't be bypassed from the browser.
-- `cors()` is currently open to any origin so the separate frontend can
-  reach it easily during development. Before going live, restrict it to
-  your real frontend domain, e.g.:
-  ```js
-  app.use(cors({ origin: 'https://your-frontend-domain.com' }));
-  ```
+- Order creation runs inside a real MySQL **transaction** — if anything
+  fails partway through (stock update, order-item insert, etc.) the whole
+  order is rolled back so the database never ends up half-written.
 
-## 6. Project structure
+## 7. Project structure
 
 ```
 guna-pharma-backend/
-  server.js            → starts the API server
-  db/init.js            → creates tables + seed products
-  routes/auth.js        → register & login
-  routes/products.js    → product catalog
-  routes/cart.js        → cart add/update/remove
-  routes/orders.js      → checkout + order history
-  routes/admin.js       → admin order management
-  middleware/auth.js    → login-session & admin-key checks
+  server.js            → starts the API server (awaits DB init first)
+  db/pool.js            → MySQL connection pool
+  db/init.js             → creates tables + seed products
+  routes/auth.js         → register & login
+  routes/products.js     → product catalog
+  routes/cart.js         → cart add/update/remove
+  routes/orders.js       → checkout (transactional) + order history
+  routes/admin.js        → admin order management
+  middleware/auth.js     → login-session & admin-key checks
 ```

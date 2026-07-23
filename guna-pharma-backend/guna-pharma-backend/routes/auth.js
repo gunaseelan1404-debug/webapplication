@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../db/init');
+const pool = require('../db/pool');
 const { JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
@@ -55,48 +55,34 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ errors });
     }
 
-    const existing = db.prepare('SELECT id FROM customers WHERE email = ? OR mobile = ?').get(email, mobile);
-    if (existing) {
+    const [existingRows] = await pool.query(
+      'SELECT id FROM customers WHERE email = ? OR mobile = ? LIMIT 1',
+      [email.trim().toLowerCase(), mobile.trim()]
+    );
+    if (existingRows.length > 0) {
       return res.status(400).json({ errors: { email: 'An account with this email or mobile number already exists.' } });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
     const customerId = generateCustomerId();
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
 
-    const insert = db.prepare(`
-      INSERT INTO customers (
+    const [result] = await pool.query(
+      `INSERT INTO customers (
         customer_id, first_name, last_name, email, mobile, password_hash,
         gender, dob, shop_name, house_street, area, city, district, state,
         pincode, country, subscribe, created_at
-      ) VALUES (@customer_id, @first_name, @last_name, @email, @mobile, @password_hash,
-        @gender, @dob, @shop_name, @house_street, @area, @city, @district, @state,
-        @pincode, @country, @subscribe, @created_at)
-    `);
-
-    const result = insert.run({
-      customer_id: customerId,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      email: email.trim().toLowerCase(),
-      mobile: mobile.trim(),
-      password_hash: passwordHash,
-      gender,
-      dob,
-      shop_name: (shopName || '').trim() || null,
-      house_street: street.trim(),
-      area: area.trim(),
-      city: city.trim(),
-      district: district.trim(),
-      state: state.trim(),
-      pincode: pincode.trim(),
-      country,
-      subscribe: subscribe ? 1 : 0,
-      created_at: createdAt
-    });
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        customerId, firstName.trim(), lastName.trim(), email.trim().toLowerCase(), mobile.trim(),
+        passwordHash, gender, dob, (shopName || '').trim() || null, street.trim(), area.trim(),
+        city.trim(), district.trim(), state.trim(), pincode.trim(), country,
+        subscribe ? 1 : 0, createdAt
+      ]
+    );
 
     const token = jwt.sign(
-      { id: result.lastInsertRowid, customerId, email: email.toLowerCase() },
+      { id: result.insertId, customerId, email: email.toLowerCase() },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -120,7 +106,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const customer = db.prepare('SELECT * FROM customers WHERE email = ?').get(email.trim().toLowerCase());
+    const [rows] = await pool.query(
+      'SELECT * FROM customers WHERE email = ? LIMIT 1',
+      [email.trim().toLowerCase()]
+    );
+    const customer = rows[0];
     if (!customer) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }

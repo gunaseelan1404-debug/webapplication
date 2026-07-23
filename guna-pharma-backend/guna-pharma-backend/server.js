@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-require('./db/init'); // creates tables + seeds products on first run
+const initDb = require('./db/init');
 
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
@@ -38,8 +38,18 @@ app.use('/api/admin', adminRoutes);
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`GUNA PHARMA API server running at http://localhost:${PORT}`);
-  console.log(`  Health check: http://localhost:${PORT}/api/health`);
-  console.log(`  Now start the frontend separately (see its README).`);
-});
+
+async function start() {
+  try {
+    await initDb(); // creates MySQL tables + seeds products on first run
+    app.listen(PORT, () => {
+      console.log(`GUNA PHARMA API server running at http://localhost:${PORT}`);
+      console.log(`  Health check: http://localhost:${PORT}/api/health`);
+    });
+  } catch (err) {
+    console.error('Failed to connect to MySQL / start server:', err.message);
+    process.exit(1);
+  }
+}
+
+start();
